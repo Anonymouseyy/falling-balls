@@ -1,5 +1,5 @@
 import pygame as pg
-from math import sin, cos, pi, radians
+from math import sin, cos, pi
 
 white = (255, 255, 255)
 gray = (138, 135, 128)
@@ -79,6 +79,11 @@ class Obstacle():
                 pts.append([int(x), int(y)])
             
             self.obj = pg.draw.polygon(self.surf, self.color, pts)
+    
+        health = pg.font.Font('Roboto-Black.ttf', 40).render(f'{self.hp}', True, black)
+        health_rect = health.get_rect()
+        health_rect.center = (self.x, self.y)
+        self.surf.blit(health, health_rect)
 
 
 

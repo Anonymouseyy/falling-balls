@@ -19,6 +19,7 @@ blue = (0, 0, 255)
 balls = []
 obstacles = []
 shapes = ['tri', 'sq', 'pent', 'hex']
+colors = [white, red, green, yellow, blue]
 
 screen = pg.display.set_mode(size)
 pg.display.set_caption('Falling Balls')
@@ -27,6 +28,14 @@ pg.display.set_caption('Falling Balls')
 smallFont = pg.font.Font('Roboto-Black.ttf', 14)
 mediumFont = pg.font.Font('Roboto-Black.ttf', 28)
 largeFont = pg.font.Font('Roboto-Black.ttf', 40)
+
+
+def draw_aimer():
+    mouse_x, mouse_y = pg.mouse.get_pos()
+    length = 50
+    pg.math.Vector2()
+    pg.draw.line(screen, white, (width//2, -5), (mouse_x, mouse_y), 5)
+
 
 while True:
     clock.tick(60)
@@ -38,12 +47,12 @@ while True:
         elif e.type == pg.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pg.mouse.get_pos()
             #balls.append(Ball(mouse_x, mouse_y, 10, screen, random.randint(-10, 10)))
-            #print(mouse_x, mouse_y)
-            obstacles.append(Obstacle(mouse_x, mouse_y, random.choice(shapes), 100, screen, white))
+            obstacles.append(Obstacle(mouse_x, mouse_y, random.choice(shapes), random.randint(1, 100), screen, random.choice(colors)))
     
     screen.fill(black)
 
     update_balls(balls)
     update_obstacles(obstacles)
+    draw_aimer()
 
     pg.display.flip()

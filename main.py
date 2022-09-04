@@ -1,3 +1,4 @@
+from math import sin, cos, radians
 import pygame as pg
 from helpers import Ball, Obstacle, update_balls, update_obstacles
 import sys, time, random
@@ -32,9 +33,13 @@ largeFont = pg.font.Font('Roboto-Black.ttf', 40)
 
 def draw_aimer():
     mouse_x, mouse_y = pg.mouse.get_pos()
-    length = 50
-    pg.math.Vector2()
-    pg.draw.line(screen, white, (width//2, -5), (mouse_x, mouse_y), 5)
+    length = 100
+    mouse_pt = pg.math.Vector2(mouse_x, mouse_y)
+    start_pt = pg.math.Vector2(width//2, 0)
+    angle = pg.math.Vector2().angle_to(mouse_pt-start_pt)
+
+    endx, endy = (cos(radians(angle))*length) + width//2, sin(radians(angle))*length
+    pg.draw.line(screen, white, start_pt, (endx, endy), 5)
 
 
 while True:

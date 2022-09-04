@@ -1,5 +1,5 @@
 import pygame as pg
-from helpers import Ball, update_balls
+from helpers import Ball, Obstacle, update_balls, update_obstacles
 import sys, time, random
 
 pg.init()
@@ -17,6 +17,8 @@ yellow = (255, 255, 0)
 blue = (0, 0, 255)
 
 balls = []
+obstacles = []
+shapes = ['tri', 'sq', 'pent', 'hex']
 
 screen = pg.display.set_mode(size)
 pg.display.set_caption('Falling Balls')
@@ -35,11 +37,13 @@ while True:
             sys.exit()
         elif e.type == pg.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pg.mouse.get_pos()
-            balls.append(Ball(mouse_x, mouse_y, 10, screen, random.randint(-10, 10)))
-            print(mouse_x, mouse_y)
+            #balls.append(Ball(mouse_x, mouse_y, 10, screen, random.randint(-10, 10)))
+            #print(mouse_x, mouse_y)
+            obstacles.append(Obstacle(mouse_x, mouse_y, random.choice(shapes), 100, screen, white))
     
     screen.fill(black)
 
     update_balls(balls)
+    update_obstacles(obstacles)
 
     pg.display.flip()

@@ -51,12 +51,12 @@ while True:
             sys.exit()
         elif e.type == pg.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pg.mouse.get_pos()
-            #balls.append(Ball(mouse_x, mouse_y, 10, screen, random.randint(-10, 10)))
+            balls.append(Ball(width//2, 0, 10, screen, random.randint(-10, 10)))
             obstacles.append(Obstacle(mouse_x, mouse_y, random.choice(shapes), random.randint(1, 100), screen, random.choice(colors)))
     
     screen.fill(black)
 
-    update_balls(balls)
+    update_balls(balls, obstacles)
     update_obstacles(obstacles)
     draw_aimer()
 

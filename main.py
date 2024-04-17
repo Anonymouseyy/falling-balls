@@ -56,13 +56,19 @@ def spawn_line_of_obstacles():
 
     if number_of_obstacles == 4:
         for i in range(number_of_obstacles):
-            obstacles.append(Obstacle((i*125)+75, 850, random.choice(shapes), round((random.randint(1, 10)+random.random())*level), screen, random.choice(colors)))
+            obstacles.append(Obstacle((i*125)+75, 850, random.choice(shapes),
+                                      round((random.randint(1, 10)+random.random())*level), screen,
+                                      random.choice(colors)))
     elif number_of_obstacles == 1:
-        obstacles.append(Obstacle(random.randint(55, 445), 850, random.choice(shapes), round((random.randint(1, 10)+random.random())*level), screen, random.choice(colors)))
+        obstacles.append(Obstacle(random.randint(55, 445), 850, random.choice(shapes),
+                                  round((random.randint(1, 10)+random.random())*level), screen, random.choice(colors)))
     else:
         space_per_ob = width//number_of_obstacles
         for i in range(number_of_obstacles):
-            obstacles.append(Obstacle(random.randint((i*space_per_ob)+55, ((i+1)*space_per_ob)-55), 850, random.choice(shapes), round((random.randint(1, 10)+random.random())*level), screen, random.choice(colors)))
+            obstacles.append(Obstacle(random.randint((i*space_per_ob)+55, ((i+1)*space_per_ob)-55), 850,
+                                      random.choice(shapes), round((random.randint(1, 10)+random.random())*level),
+                                      screen, random.choice(colors)))
+
 
 while True:
     clock.tick(60)
@@ -104,7 +110,7 @@ while True:
             obstacle.y -= 2
         move_line += 2
 
-    if balls == []:
+    if not balls:
         if not added_line:
             spawn_line_of_obstacles()
             added_line = True

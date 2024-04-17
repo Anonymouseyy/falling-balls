@@ -13,8 +13,9 @@ blue = (0, 0, 255)
 size = width, height = 500, 750
 
 
-class Ball():
+class Ball:
     def __init__(self, x, y, radius, screen, xvel=0, color=white):
+        self.obj = None
         self.surf = screen
         self.x = x
         self.y = y
@@ -23,24 +24,22 @@ class Ball():
         self.yvel = 0
         self.xvel = xvel
         self.draw()
-    
-    
+
     def draw(self):
         self.obj = pg.draw.circle(self.surf, self.color, (self.x, self.y), self.radius)
-    
 
     def bounce(self, lp0, lp1):
         pt = pg.math.Vector2(self.x, self.y)
         dir = pg.math.Vector2(self.xvel, self.yvel)
         l_dir = (lp1 - lp0).normalize()                 # direction vector of the line
         nv = pg.math.Vector2(-l_dir[1], l_dir[0])       # normal vector to the line
-        d = (lp0-pt).dot(nv)                            # distance to line
         r_dir = dir.reflect(nv)                         # reflect the direction vector on the line (like a billiard ball)                       
         self.xvel, self.yvel = r_dir
 
 
-class Obstacle():
+class Obstacle:
     def __init__(self, x, y, shape, hp, screen, color):
+        self.obj = None
         self.surf = screen
         self.x = x
         self.y = y
@@ -60,7 +59,6 @@ class Obstacle():
         elif shape == 'hex':
             self.sides = 6
         self.draw()
-    
 
     def draw(self):
         pts = []
@@ -70,10 +68,7 @@ class Obstacle():
             pts.append([int(x), int(y)])
         
         for i in range(self.sides):
-            if i == self.sides-1:
-                self.lines.append((pts[i], pts[0]))
-            else:
-                self.lines.append((pts[i], pts[i+1]))
+            self.lines.append((pts[i], pts[(i+1) % self.sides]))
         
         self.obj = pg.draw.polygon(self.surf, self.color, pts)
     
@@ -81,7 +76,6 @@ class Obstacle():
         health_rect = health.get_rect()
         health_rect.center = (self.x, self.y)
         self.surf.blit(health, health_rect)
-
 
 
 def update_balls(balls, obstacles):
@@ -100,14 +94,13 @@ def update_balls(balls, obstacles):
         obstacles_rects = [obstacle.obj for obstacle in obstacles]
         
         x = pg.Rect.collidelist(ball.obj, obstacles_rects)
-        if x >= 0:
+        if x:
             obstacle = obstacles[x]
             obstacle.hp -= 1
             if obstacle.hp <= 0:
                 obstacles.remove(obstacle)
 
-            ball.xvel *= -0.9
-            ball.yvel *= -0.9
+            ball.bounce()
 
         ball.draw()
     

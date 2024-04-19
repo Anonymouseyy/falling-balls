@@ -1,6 +1,6 @@
 from importlib.machinery import OPTIMIZED_BYTECODE_SUFFIXES
 import pygame as pg
-from math import sin, cos, pi
+from math import sin, cos, pi, sqrt
 
 white = (255, 255, 255)
 gray = (138, 135, 128)
@@ -29,12 +29,8 @@ class Ball:
         self.obj = pg.draw.circle(self.surf, self.color, (self.x, self.y), self.radius)
 
     def bounce(self, lp0, lp1):
-        pt = pg.math.Vector2(self.x, self.y)
-        dir = pg.math.Vector2(self.xvel, self.yvel)
-        l_dir = (lp1 - lp0).normalize()                 # direction vector of the line
-        nv = pg.math.Vector2(-l_dir[1], l_dir[0])       # normal vector to the line
-        r_dir = dir.reflect(nv)                         # reflect the direction vector on the line (like a billiard ball)                       
-        self.xvel, self.yvel = r_dir
+        vel = sqrt(self.yvel**2+self.xvel**2)
+        bounce_vec = -(lp1[0]-lp0[0])/(lp1[1]-lp0[1])
 
 
 class Obstacle:
@@ -94,13 +90,15 @@ def update_balls(balls, obstacles):
         obstacles_rects = [obstacle.obj for obstacle in obstacles]
         
         x = pg.Rect.collidelist(ball.obj, obstacles_rects)
-        if x:
+        if x >= 0:
             obstacle = obstacles[x]
             obstacle.hp -= 1
             if obstacle.hp <= 0:
                 obstacles.remove(obstacle)
 
-            ball.bounce()
+            for line in obstacle.lines:
+                if ball.obj.clipline(line):
+                    ball.bounce(line[0], line[1])
 
         ball.draw()
     

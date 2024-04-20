@@ -29,8 +29,13 @@ class Ball:
         self.obj = pg.draw.circle(self.surf, self.color, (self.x, self.y), self.radius)
 
     def bounce(self, lp0, lp1):
-        vel = sqrt(self.yvel**2+self.xvel**2)
-        bounce_vec = -(lp1[0]-lp0[0])/(lp1[1]-lp0[1])
+        vel_vec = pg.math.Vector2(self.xvel, self.yvel)
+        vel = vel_vec.magnitude()
+        line_vec = pg.math.Vector2(lp0[0]-lp1[0], lp0[1]-lp1[1])
+
+        reflected = vel_vec.reflect(line_vec).normalize()
+        reflected.scale_to_length(vel)
+        self.xvel, self.yvel = reflected[0], reflected[1]
 
 
 class Obstacle:

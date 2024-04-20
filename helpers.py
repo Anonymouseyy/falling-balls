@@ -1,6 +1,5 @@
-from importlib.machinery import OPTIMIZED_BYTECODE_SUFFIXES
 import pygame as pg
-from math import sin, cos, pi, sqrt
+from math import sin, cos, pi
 
 white = (255, 255, 255)
 gray = (138, 135, 128)
@@ -30,10 +29,10 @@ class Ball:
 
     def bounce(self, lp0, lp1):
         vel_vec = pg.math.Vector2(self.xvel, self.yvel)
-        vel = vel_vec.magnitude()
+        vel = vel_vec.magnitude()*0.9
         line_vec = pg.math.Vector2(lp0[0]-lp1[0], lp0[1]-lp1[1])
 
-        reflected = vel_vec.reflect(line_vec).normalize()
+        reflected = vel_vec.reflect(line_vec)
         reflected.scale_to_length(vel)
         self.xvel, self.yvel = reflected[0], reflected[1]
 
@@ -110,5 +109,5 @@ def update_balls(balls, obstacles):
 
 def update_obstacles(obstacles):
     for obstacle in obstacles:
-        obstacle.rot += 0.05
+        obstacle.rot += 0.02
         obstacle.draw()
